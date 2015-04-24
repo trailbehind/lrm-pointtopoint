@@ -423,7 +423,7 @@ module.exports = function(x, y, properties){
 					name: wp.name,
 					options: wp.options
 				});
-				latlngs.push(wp.latLng);
+				latlngs.push([wp.latLng.lat, wp.latLng.lng]);
 				coordinates.push([wp.latLng.lng, wp.latLng.lat]);
 			}
 
