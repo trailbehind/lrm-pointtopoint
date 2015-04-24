@@ -1,0 +1,39 @@
+{
+  "name": "lrm-pointtopoint",
+  "version": "1.0.0",
+  "description": "A Router for leaflet-routing-machine that doesnt do any routing.",
+  "main": "src/L.Routing.PointToPoint.js",
+  "scripts": {
+    "dist": "./scripts/dist.sh",
+    "publish": "./scripts/publish.sh",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "leaflet",
+    "routing"
+  ],
+  "author": "Jesse Crocker <jesse@gaiagps.com>",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trailbehind/lrm-pointtopoint"
+  },
+  "homepage": "https://github.com/trailbehind/lrm-pointtopoint",
+  "bugs": "https://github.com/trailbehind/lrm-pointtopoint/issues",
+  "dependencies": {
+    "leaflet": "^0.7.3",
+    "turf-linestring" : "1.x.x",
+    "turf-bearing": "1.x.x",
+    "turf-line-distance": "1.x.x",
+    "turf-point": "1.x.x",
+    "turf-distance": "1.x.x"
+  },
+  "browserify-shim": {
+    "leaflet": "global:L"
+  },
+  "devDependencies": {
+    "browserify": "^8.1.3",
+    "browserify-shim": "^3.8.2",
+    "uglify-js": "^2.4.16"
+  }
+}
