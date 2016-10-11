@@ -34,7 +34,7 @@
 					name: wp.name,
 					options: wp.options
 				});
-				latlngs.push([wp.latLng.lat, wp.latLng.lng]);
+				latlngs.push(L.latLng(wp.latLng.lat,wp.latLng.lng));
 				coordinates.push([wp.latLng.lng, wp.latLng.lat]);
 			}
 
@@ -71,7 +71,7 @@
 				if(i + 1 < feature.geometry.coordinates.length ) {
 					nextPoint = turf.point(feature.geometry.coordinates[i + 1]);
 				} else {
-					nextPoint = null;	
+					nextPoint = null;
 				}
 
 				if(i == 0) {
