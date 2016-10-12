@@ -3,12 +3,12 @@
 //http://www.movable-type.co.uk/scripts/latlong.html
 
 /**
- * Takes two {@link Point} features and finds the bearing between them.
+ * Takes two {@link Point|points} and finds the geographic bearing between them.
  *
  * @module turf/bearing
  * @category measurement
- * @param {Point} start starting Point
- * @param {Point} end ending Point
+ * @param {Feature<Point>} start starting Point
+ * @param {Feature<Point>} end ending Point
  * @category measurement
  * @returns {Number} bearing in decimal degrees
  * @example
@@ -75,16 +75,15 @@ var invariant = require('turf-invariant');
 //http://www.movable-type.co.uk/scripts/latlong.html
 
 /**
- * Takes two {@link Point} features and calculates
- * the distance between them in degress, radians,
+ * Calculates the distance between two {@link Point|points} in degress, radians,
  * miles, or kilometers. This uses the
  * [Haversine formula](http://en.wikipedia.org/wiki/Haversine_formula)
  * to account for global curvature.
  *
  * @module turf/distance
  * @category measurement
- * @param {Feature} from origin point
- * @param {Feature} to destination point
+ * @param {Feature<Point>} from origin point
+ * @param {Feature<Point>} to destination point
  * @param {String} [units=kilometers] can be degrees, radians, miles, or kilometers
  * @return {Number} distance between the two points
  * @example
@@ -117,7 +116,7 @@ var invariant = require('turf-invariant');
  *
  * //=distance
  */
-module.exports = function(point1, point2, units){
+module.exports = function(point1, point2, units) {
   invariant.featureOf(point1, 'Point', 'distance');
   invariant.featureOf(point2, 'Point', 'distance');
   var coordinates1 = point1.geometry.coordinates;
@@ -127,16 +126,18 @@ module.exports = function(point1, point2, units){
   var dLon = toRad(coordinates2[0] - coordinates1[0]);
   var lat1 = toRad(coordinates1[1]);
   var lat2 = toRad(coordinates2[1]);
-  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-          Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+
+  var a = Math.pow(Math.sin(dLat/2), 2) +
+          Math.pow(Math.sin(dLon/2), 2) * Math.cos(lat1) * Math.cos(lat2);
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 
   var R;
-  switch(units){
+  switch(units) {
     case 'miles':
       R = 3960;
       break;
     case 'kilometers':
+    case 'kilometres':
       R = 6373;
       break;
     case 'degrees':
@@ -277,11 +278,7 @@ module.exports = function (line, units) {
   return travelled;
 }
 
-},{"turf-distance":5,"turf-point":7}],5:[function(require,module,exports){
-arguments[4][2][0].apply(exports,arguments)
-},{"dup":2,"turf-invariant":6}],6:[function(require,module,exports){
-arguments[4][3][0].apply(exports,arguments)
-},{"dup":3}],7:[function(require,module,exports){
+},{"turf-distance":2,"turf-point":5}],5:[function(require,module,exports){
 /**
  * Takes coordinates and properties (optional) and returns a new {@link Point} feature.
  *
@@ -313,7 +310,7 @@ module.exports = function(coordinates, properties) {
   };
 };
 
-},{}],8:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 /**
  * Creates a {@link LineString} {@link Feature} based on a
  * coordinate array. Properties can be added optionally.
@@ -356,7 +353,7 @@ module.exports = function(coordinates, properties){
   };
 };
 
-},{}],9:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 /**
  * Generates a new GeoJSON Point feature, given coordinates
  * and, optionally, properties.
@@ -385,7 +382,7 @@ module.exports = function(x, y, properties){
   };
 }
 
-},{}],10:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 (function (global){
 (function() {
 	'use strict';
@@ -397,7 +394,7 @@ module.exports = function(x, y, properties){
 	turf.point = require('turf-point');
 	turf.bearing = require('turf-bearing');
 
-	var L = (typeof window !== "undefined" ? window.L : typeof global !== "undefined" ? global.L : null);
+	var L = (typeof window !== "undefined" ? window['L'] : typeof global !== "undefined" ? global['L'] : null);
 	L.Routing = L.Routing || {};
 
 	L.Routing.PointToPoint = L.Class.extend({
@@ -423,7 +420,7 @@ module.exports = function(x, y, properties){
 					name: wp.name,
 					options: wp.options
 				});
-				latlngs.push([wp.latLng.lat, wp.latLng.lng]);
+				latlngs.push(L.latLng(wp.latLng.lat,wp.latLng.lng));
 				coordinates.push([wp.latLng.lng, wp.latLng.lat]);
 			}
 
@@ -460,7 +457,7 @@ module.exports = function(x, y, properties){
 				if(i + 1 < feature.geometry.coordinates.length ) {
 					nextPoint = turf.point(feature.geometry.coordinates[i + 1]);
 				} else {
-					nextPoint = null;	
+					nextPoint = null;
 				}
 
 				if(i == 0) {
@@ -509,4 +506,4 @@ module.exports = function(x, y, properties){
 })();
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"turf-bearing":1,"turf-distance":2,"turf-line-distance":4,"turf-linestring":8,"turf-point":9}]},{},[10]);
+},{"turf-bearing":1,"turf-distance":2,"turf-line-distance":4,"turf-linestring":6,"turf-point":7}]},{},[8]);
